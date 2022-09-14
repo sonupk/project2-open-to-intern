@@ -5,6 +5,8 @@ const validator = require ("validator")
 
 
 
+
+
 const createIntern = async function (req,res) {
     try {
         const internData = req.body
@@ -17,6 +19,11 @@ const createIntern = async function (req,res) {
         if (!internData.name){
             return res.status (400).send({status: false, message : "required name"})
         }
+        
+        if (!(/^[a-zA-Z.]{3,}$/).test(internData.name))
+        return res.status(400).send({status:false, message:'Only alphabets in name!!'})
+
+
 // -----------------for email validation------------------
         if (!internData.email){
             return res.status (400).send({status : false, message: "required email"})
@@ -27,12 +34,12 @@ const createIntern = async function (req,res) {
         }
 
         const findEmail = await internModel.find({email : internData.email})
-        console.log(internData.email);
+        // console.log(internData.email);
         if (findEmail.length > 0){
             return res.status(400).send({status : false, message :"email is aldready taken"})
         }
         
-        // --------------------for phone validation----------------
+// --------------------for phone validation----------------
         if (!internData.mobile){
             return res.status(400).send({status : false, message : "required mobile Number"})
         }
