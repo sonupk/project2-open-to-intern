@@ -1,12 +1,8 @@
 const mongoose= require('mongoose')
 const collageModel= require('../model/collageModel')
 const internModel =require('../model/internModel')
-const validator = require ("validator")
 
-function checkPhoneNumber (str){
-    var re = /"^[0-9]{10}$"/;
-    return re.test(str)
-}
+
 
 const createCollege =async function (req,res) {
     try {
