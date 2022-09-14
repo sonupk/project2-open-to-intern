@@ -1,4 +1,3 @@
-const mongoose= require('mongoose')
 const internModel = require('../model/internModel')
 const collegeModel = require('../model/collageModel')
 const validator = require ("validator")
@@ -20,7 +19,7 @@ const createIntern = async function (req,res) {
             return res.status (400).send({status: false, message : "required name"})
         }
         
-        if (!(/^[a-zA-Z.]{3,}$/).test(internData.name))
+        if (!(/^[a-zA-Z ]{3,}$/).test(internData.name))
         return res.status(400).send({status:false, message:'Only alphabets in name!!'})
 
 
@@ -56,6 +55,7 @@ const createIntern = async function (req,res) {
     //------------------collegeDetails validation-------------------- 
 
         let collegeDetails = await collegeModel.findOne({name:collegeName})
+        
         if (!collegeDetails){
             return res.status(400).send({ status : false, message : "college details not found"})
         }

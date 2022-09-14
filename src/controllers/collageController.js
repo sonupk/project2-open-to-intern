@@ -1,6 +1,5 @@
-const mongoose= require('mongoose')
 const collageModel= require('../model/collageModel')
-const internModel =require('../model/internModel')
+
 
 
 
@@ -14,20 +13,36 @@ const createCollege =async function (req,res) {
         if (!collegeData.name){
             return res.status (400).send({status: false, message : "required name"})
         }
+        if (!(/^[a-zA-Z ]{3,6}$/).test(collegeData.name))
+        return res.status(400).send({status:false, message:'Only alphabets in Name!!'})
 
 
         if (!collegeData.fullName){
             return res.status (400).send({status : false, message: "required fullName"})
         }
+        if (!(/^[a-zA-Z ,-]{5,}$/).test(collegeData.fullName))
+        return res.status(400).send({status:false, message:'Only alphabets in collegeName!!'})
 
         if (!collegeData.logoLink){
             return res.status(400).send({status : false, msg : "required logoLink"})
         }
-       
-       const { name, fullName, logoLink } = collegeData
 
+        //validation for logo link
+
+        if (!(/^https?:\/\/.+\.(jpg|jpeg|png|webp|avif|gif|svg)$/).test(collegeData.logoLink))
+        return res.status(400).send({status:false, message:'Invalid logo url link !!'})
+       
+        
+        //checking for duplicate data
+        
+        if(await collageModel.findOne({name:collegeData.name}))
+        
+        return res.status(400).send({status:false, message:'Data is already present in Database'})
+        
         //creating college documents-------------
+        const { name, fullName, logoLink } = collegeData
         const newCollege = await collageModel.create(collegeData)
+        
         return res.status(201).send({ status: true, message: "College created succesfully.", data: newCollege })
 
     }
