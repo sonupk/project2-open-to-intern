@@ -5,6 +5,7 @@ const internController=require('../controllers/internController')
 
 
 router.post("/functionup/colleges",collageController.createCollege)// for creating college
+router.post("/functionup/interns", internController.createIntern)
 
 
 module.exports=router
