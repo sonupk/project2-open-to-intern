@@ -4,11 +4,6 @@ const collegeModel = require('../model/collageModel')
 const validator = require ("validator")
 
 
-function checkPhoneNumber (str){
-    var re = /"^[0-9]{10}$"/;
-    return re.test(str)
-}
-
 
 const createIntern = async function (req,res) {
     try {
@@ -31,22 +26,22 @@ const createIntern = async function (req,res) {
 
         const findEmail = await internModel.find({email : internData.email})
         console.log(internData.email);
-        if (!findEmail.length > 0){
+        if (findEmail.length > 0){
             return res.status(400).send({status : false, message :"email is aldready taken"})
         }
         
         // --------------------for phone validation----------------
         if (!internData.mobile){
-            return res.status(400).send({status : false, message : "required mobileNumber"})
+            return res.status(400).send({status : false, message : "required mobile Number"})
         }
         
-        if (!checkPhoneNumber (internData.mobile.trim())){
-            return res.status(400).send({status : false, message : "phone number is invalid"})
+        if (internData.mobile.length < 10 || internData.mobile.length >= 11){
+            return res.status(400).send({status : false, message : "mobile number is invalid"})
         }
 
         const findMobile = await internModel.find({mobile : internData.mobile})
-        if (!findMobile.length > 0){
-            return res.status(400).send({status : false, message :"mobileNumber is aldready taken"})
+        if (findMobile.length > 0){
+            return res.status(400).send({status : false, message :"mobile Number is aldready taken"})
         }
 
         const { name, mobile, email, collegeName} = req.body
