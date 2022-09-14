@@ -75,13 +75,13 @@ const createIntern = async function (req,res) {
 const geDetails = async function(req, res){
     try{    
         let name = req.query.name
-
+        
+        //validation for name(collgeName abberiviation)
         if (!name){
-            return res.status(400).send({status : false, message : "name is required in query"})
-        }
-        let Name = req.query.name.trim()
-        if (!Name){
             return res.status(400).send({status : false, message : "name is required"})
+        }
+        if (!name.trim() || !(/^[a-zA-Z]{3,}$/).test(name)){
+            return res.status(400).send({status : false, message : "Enter valid abbreviation"})
         }
 
         let collegeData = await collegeModel.findOne({name:name})
