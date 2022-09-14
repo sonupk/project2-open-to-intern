@@ -1,16 +1,36 @@
 const mongoose= require('mongoose')
 const collageModel= require('../model/collageModel')
 const internModel =require('../model/internModel')
+const validator = require ("validator")
+
+function checkPhoneNumber (str){
+    var re = /"^[0-9]{10}$"/;
+    return re.test(str)
+}
 
 const createCollege =async function (req,res) {
     try {
         const collegeData = req.body
+        if (Object.keys(collegeData).length < 1){
+            return res.status (400).send({status : false, message : "Bad request"})
+        }
+
+        if (!collegeData.name){
+            return res.status (400).send({status: false, message : "required name"})
+        }
+
+        if (!collegeData.fullName){
+            return res.status (400).send({status : false, message: "required fullName"})
+        }
+
+        if (!collegeData.logoLink){
+            return res.status(400).send({status : false, msg : "required logoLink"})
+        }
        
        const { name, fullName, logoLink } = collegeData
 
         //creating college documents-------------
         const newCollege = await collageModel.create(collegeData)
-        console.log(newCollege)
         res.status(201).send({ status: true, message: "College created succesfully.", data: newCollege })
 
     }
