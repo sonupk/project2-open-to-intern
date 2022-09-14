@@ -54,10 +54,6 @@ const createIntern = async function (req,res) {
         }
 
     //------------------collegeDetails validation-------------------- 
-    // let collageName = req.query.name    
-    // if (!collageName){
-    //         res.status(400).send({status : false, message : "college name is required"})
-    //     }
 
         let collegeDetails = await collegeModel.findOne({name:collegeName})
         if (!collegeDetails){
@@ -78,8 +74,13 @@ const createIntern = async function (req,res) {
 
 const geDetails = async function(req, res){
     try{    
-        let name = req.query.name.trim()
+        let name = req.query.name
+
         if (!name){
+            return res.status(400).send({status : false, message : "name is required in query"})
+        }
+        let Name = req.query.name.trim()
+        if (!Name){
             return res.status(400).send({status : false, message : "name is required"})
         }
 
@@ -97,7 +98,7 @@ const geDetails = async function(req, res){
         res.status(200).send({staus:true, name:collegeData.name,fullName:collegeData.fullName,logoLink:collegeData.logoLink,interns:internData})
         
         }catch(err){
-            return res.status(400).send({status:false, error:err.message})
+            return res.status(500).send({status:false, error:err.message})
         }
     }
     

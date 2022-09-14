@@ -15,6 +15,7 @@ const createCollege =async function (req,res) {
             return res.status (400).send({status: false, message : "required name"})
         }
 
+
         if (!collegeData.fullName){
             return res.status (400).send({status : false, message: "required fullName"})
         }
