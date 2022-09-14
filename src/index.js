@@ -1,8 +1,8 @@
-import express from 'express'
-import bodyParser from 'body-parser'
-import mongoose from 'mongoose'
+const express=require("express")
+const mongoose=require("mongoose")
+const bodyParser=require("body-parser")
 
-import route from './route/route'
+const route=require('./route/route')
 
 
 const app = express()
