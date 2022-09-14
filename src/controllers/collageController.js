@@ -27,7 +27,7 @@ const createCollege =async function (req,res) {
 
         //creating college documents-------------
         const newCollege = await collageModel.create(collegeData)
-        res.status(201).send({ status: true, message: "College created succesfully.", data: newCollege })
+        return res.status(201).send({ status: true, message: "College created succesfully.", data: newCollege })
 
     }
     catch (err) {
