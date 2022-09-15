@@ -6,6 +6,11 @@ const createCollege =async function (req,res) {
     try {
         const collegeData = req.body
 
+        //--------------query not allowed validation------------
+        if (Object.keys(req.query) != 0)
+        return res.status(400).send({ status: false, message: "Do not provide any filter !!" })
+
+
         //----------------match validation---------------------
         let comp =["name", "fullName", "logoLink", "isDeleted"]
         if(!Object.keys(collegeData).every(ele=>comp.includes(ele)))
