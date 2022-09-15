@@ -95,6 +95,10 @@ const geDetails = async function(req, res){
         let name = req.query.name
 
 //---------------validation for name(collgeName abberiviation)----------------------------
+        let query = req.query    
+        let comp = ['name']
+        if(!Object.keys(query).every(ele=>comp.includes(ele)))
+        return res.status(400).send({status : false, message : "wrong query given"})
 
         if (!name){
         return res.status(400).send({status : false, message : "name is required"})
@@ -114,7 +118,7 @@ const geDetails = async function(req, res){
         let college_id =collegeData._id
 
         //-----if college_id not found--------
-        if (!college_id){
+        if(!college_id){
         return res.status(400).send({status : false, message : "college id is not found"})
         }
 
