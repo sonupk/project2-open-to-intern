@@ -67,24 +67,11 @@ const createIntern = async function (req,res) {
         return res.status(400).send({status : false, message :"mobile Number is aldready taken"})
         }
 
-<<<<<<< HEAD
         const { name, mobile, email, collegeName} = internData
         let collegeDetails = await collegeModel.findOne({name:collegeName})
         console.log(collegeDetails)
         let college_id = collegeDetails._id.toString()
         let newData ={name,mobile,email,college_id}
-=======
-    //------------------collegeDetails validation-------------------- 
-
-        let collegeDetails = await collegeModel.findOne({name:collegeName})
-        
-        if (!collegeDetails){
-        return res.status(400).send({ status : false, message : "college details not found"})
-        }
-
-        let collegeId = collegeDetails._id
-        let newData ={name,mobile,email,collegeId}
->>>>>>> be61ce7c9dd87b6c1fdb8a19a54c59c965a36971
         const newIntern = await internModel.create(newData)
         
         return res.status(201).send({status:true, message:"internship successfully created", data:newIntern})
@@ -103,7 +90,8 @@ const geDetails = async function(req, res){
 //---------------validation for name(collgeName abberiviation)----------------------------
         let query = req.query    
         let comp = ['name']
-        if(!Object.keys(query).every(ele=>comp.includes(ele)))
+//using query params validation
+       if(!Object.keys(query).every(ele=>comp.includes(ele)))
         return res.status(400).send({status : false, message : "wrong query given"})
 
         if (!name){
@@ -115,17 +103,8 @@ const geDetails = async function(req, res){
         }
 
         let collegeData = await collegeModel.findOne({name:name})
-<<<<<<< HEAD
         
         console.log(collegeData)
-=======
-
-        //-----if college not found--------
-        if(!collegeData){
-        return res.status(400).send({status : false, message : "college not found"})
-        }
-
->>>>>>> be61ce7c9dd87b6c1fdb8a19a54c59c965a36971
         let college_id =collegeData._id
 
         //-----if college_id not found--------
