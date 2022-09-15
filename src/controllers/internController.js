@@ -74,8 +74,8 @@ const createIntern = async function (req,res) {
         const { name, mobile, email, collegeName} = internData
         let collegeDetails = await collegeModel.findOne({name:collegeName})
         console.log(collegeDetails)
-        let college_id = collegeDetails._id.toString()
-        let newData ={name,mobile,email,college_id}
+        let collegeId = collegeDetails._id.toString()
+        let newData ={name,mobile,email,collegeId}
         const newIntern = await internModel.create(newData)
         
         return res.status(201).send({status:true, message:"internship successfully created", data:newIntern})
