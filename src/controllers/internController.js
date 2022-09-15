@@ -9,6 +9,10 @@ const validator = require ("validator")
 const createIntern = async function (req,res) {
     try {
         const internData = req.body
+        if (Object.keys(req.query) != 0) {
+                return res.status(400).send({ status: false, message: "Do not provide any filter !!" })
+        }
+
         if (Object.keys(internData).length < 1){
         return res.status (400).send({status : false, message : "Bad request"})
         }
