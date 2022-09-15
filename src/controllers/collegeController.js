@@ -6,7 +6,7 @@ const createCollege =async function (req,res) {
     try {
         const collegeData = req.body
 
-
+        //----------------match validation---------------------
         let comp =["name", "fullName", "logoLink", "isDeleted"]
         if(!Object.keys(collegeData).every(ele=>comp.includes(ele)))
         return res.status(400).send({status:false, message:'Invalid fields in College'})
@@ -44,7 +44,6 @@ const createCollege =async function (req,res) {
         return res.status(400).send({status:false, message:'Data is already present in Database'})
         
         //--------------------creating college documents-------------------------
-        const { name, fullName, logoLink, isDeleted } = collegeData
         const newCollege = await collegeModel.create(collegeData)
         
         return res.status(201).send({ status: true, message: "College created succesfully.", data: newCollege })

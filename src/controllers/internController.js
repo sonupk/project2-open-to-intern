@@ -10,12 +10,12 @@ const createIntern = async function (req,res) {
     try {
         const internData = req.body
 
+ //--------------------match the fields---------------------------
         let comp =["name", "mobile", "email", "collegeName", "isDeleted"]
         if(!Object.keys(internData).every(ele=>comp.includes(ele)))
         return res.status(400).send({status:false, message:'Invalid fields in Intern'})
 
-
-        //query not allowed validation
+ //--------------query not allowed validation-------------------------
         if (Object.keys(req.query) != 0) {
                 return res.status(400).send({ status: false, message: "Do not provide any filter !!" })
         }
@@ -70,11 +70,12 @@ const createIntern = async function (req,res) {
         if (findMobile.length > 0){
         return res.status(400).send({status : false, message :"mobile Number is aldready taken"})
         }
-
+//---------------------creating Intern-----------------------------------------
         const { name, mobile, email, collegeName} = internData
         let collegeDetails = await collegeModel.findOne({name:collegeName})
-        console.log(collegeDetails)
+
         let collegeId = collegeDetails._id.toString()
+
         let newData ={name,mobile,email,collegeId}
         const newIntern = await internModel.create(newData)
         
@@ -115,13 +116,14 @@ const geDetails = async function(req, res){
         return res.status(400).send({status : false, message : "college name not found"})
         }
 
-        
+        //-----------------fetching all details of college-intern----------------------------------
 
         let internData =await internModel.find({collegeId:collegeName, isDeleted: false}).select({name:1,email:1,mobile:1})
         
         res.status(200).send({staus:true, name:collegeData.name,fullName:collegeData.fullName,logoLink:collegeData.logoLink,interns:internData})
         
-        }catch(err){
+        }
+        catch(err){
         return res.status(500).send({status:false, message:'Error', error:err.message})
         }
     }
