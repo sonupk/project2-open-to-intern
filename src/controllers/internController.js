@@ -71,16 +71,11 @@ const createIntern = async function (req,res) {
         return res.status(400).send({status : false, message :"mobile Number is aldready taken"})
         }
 
-// ----------------------college not found-------------------------
-        const findCollege = await internModel.find({name : internData.name})
-        if(!findCollege){ 
-        return res.status(400).send({status : false, message : "college name not found"})
-        }
 //---------------------creating Intern-----------------------------------------
         const { name, mobile, email, collegeName} = internData
         let collegeDetails = await collegeModel.findOne({name:collegeName})
+        
 
-        console.log(collegeDetails);
         let collegeId = collegeDetails._id.toString()
 
         let newData ={name,mobile,email,collegeId}
@@ -123,9 +118,14 @@ const geDetails = async function(req, res){
         return res.status(400).send({status : false, message : "college name not found"})
         }
 
-        //-----------------fetching all details of college-intern----------------------------------
+
+//-----------------fetching all details of college-intern----------------------------------
 
         let internData =await internModel.find({collegeId:collegeName, isDeleted: false}).select({name:1,email:1,mobile:1})
+        // -----------------if no interns found--------------------------------------------
+        if (internData.length == 0) {
+        return res.status(400).send({ status: false, message: "No intern found in this college !!" })
+        }
         
         res.status(200).send({staus:true, name:collegeData.name,fullName:collegeData.fullName,logoLink:collegeData.logoLink,interns:internData})
         
