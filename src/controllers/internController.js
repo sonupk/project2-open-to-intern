@@ -23,13 +23,6 @@ const createIntern = async function (req,res) {
         if (Object.keys(internData).length < 1){
         return res.status (400).send({status : false, message : "Bad request"})
         }
-//------------------intern name validation---------------
-        if (!internData.name){
-        return res.status (400).send({status: false, message : "required name"})
-        }
-        
-        if (!(/^[a-zA-Z ]{3,}$/).test(internData.name))
-        return res.status(400).send({status:false, message:'Only alphabets in name!!'})
 
 //------------------intern name validation---------------
         if (!internData.name){
