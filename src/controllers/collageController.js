@@ -5,6 +5,9 @@ const collageModel= require('../model/collageModel')
 const createCollege =async function (req,res) {
     try {
         const collegeData = req.body
+//-------------------- isDeleted validation----------
+        if(collegeData.isDeleted=="" || !(/^[a-z]{4,5}$/).test(collegeData.isDeleted))
+        return res.status(400).send({status:false, message: "isDeleted should be boolean"})
        
         //--------------if body is empty------------------------
         if (Object.keys(collegeData).length < 1){

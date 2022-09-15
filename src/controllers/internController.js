@@ -90,7 +90,7 @@ const geDetails = async function(req, res){
 //---------------validation for name(collgeName abberiviation)----------------------------
         let query = req.query    
         let comp = ['name']
-//using query params validation
+//-----------------------using query params validation---------------------------
        if(!Object.keys(query).every(ele=>comp.includes(ele)))
         return res.status(400).send({status : false, message : "wrong query given"})
 
