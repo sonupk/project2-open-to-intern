@@ -1,13 +1,15 @@
-const collageModel= require('../model/collageModel')
+const collegeModel= require('../model/collegeModel')
 
 
 //--------------------College Creation--------------------------------------
 const createCollege =async function (req,res) {
     try {
         const collegeData = req.body
-//-------------------- isDeleted validation----------
-        if(collegeData.isDeleted=="" || !(/^[a-z]{4,5}$/).test(collegeData.isDeleted))
-        return res.status(400).send({status:false, message: "isDeleted should be boolean"})
+
+
+        let comp =["name", "fullName", "logoLink", "isDeleted"]
+        if(!Object.keys(collegeData).every(ele=>comp.includes(ele)))
+        return res.status(400).send({status:false, message:'Invalid fields in College'})
        
         //--------------if body is empty------------------------
         if (Object.keys(collegeData).length < 1){
@@ -38,12 +40,12 @@ const createCollege =async function (req,res) {
        
         
         //-----------------checking for duplicate data------------------------
-        if(await collageModel.findOne({name:collegeData.name}))
+        if(await collegeModel.findOne({name:collegeData.name}))
         return res.status(400).send({status:false, message:'Data is already present in Database'})
         
         //--------------------creating college documents-------------------------
-        const { name, fullName, logoLink } = collegeData
-        const newCollege = await collageModel.create(collegeData)
+        const { name, fullName, logoLink, isDeleted } = collegeData
+        const newCollege = await collegeModel.create(collegeData)
         
         return res.status(201).send({ status: true, message: "College created succesfully.", data: newCollege })
 

@@ -1,5 +1,5 @@
 const internModel = require('../model/internModel')
-const collegeModel = require('../model/collageModel')
+const collegeModel = require('../model/collegeModel')
 const validator = require ("validator")
 
 
@@ -9,6 +9,13 @@ const validator = require ("validator")
 const createIntern = async function (req,res) {
     try {
         const internData = req.body
+
+        let comp =["name", "mobile", "email", "collegeName", "isDeleted"]
+        if(!Object.keys(internData).every(ele=>comp.includes(ele)))
+        return res.status(400).send({status:false, message:'Invalid fields in Intern'})
+
+
+        //query not allowed validation
         if (Object.keys(req.query) != 0) {
                 return res.status(400).send({ status: false, message: "Do not provide any filter !!" })
         }
@@ -108,7 +115,6 @@ const geDetails = async function(req, res){
 
         let collegeData = await collegeModel.findOne({name:name})
         
-        console.log(collegeData)
         let college_id =collegeData._id
 
         //-----if college_id not found--------
