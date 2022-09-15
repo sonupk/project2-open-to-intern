@@ -117,7 +117,7 @@ const geDetails = async function(req, res){
 
         
 
-        let internData =await internModel.find({collegeId:college_id, isDeleted: false}).select({name:1,email:1,mobile:1})
+        let internData =await internModel.find({collegeId:collegeName, isDeleted: false}).select({name:1,email:1,mobile:1})
         
         res.status(200).send({staus:true, name:collegeData.name,fullName:collegeData.fullName,logoLink:collegeData.logoLink,interns:internData})
         
