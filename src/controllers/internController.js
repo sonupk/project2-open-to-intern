@@ -9,6 +9,7 @@ const validator = require ("validator")
 const createIntern = async function (req,res) {
     try {
         const internData = req.body
+        const { name, mobile, email, collegeName} = internData
 
  //--------------------match the fields---------------------------
         let comp =["name", "mobile", "email", "collegeName", "isDeleted"]
@@ -25,15 +26,15 @@ const createIntern = async function (req,res) {
         }
 
 //------------------intern name validation---------------
-        if (!internData.name){
+        if (!name){
         return res.status (400).send({status: false, message : "required name"})
         }
         
-        if (!(/^[a-zA-Z ]{3,}$/).test(internData.name))
+        if (!(/^[a-zA-Z ]{3,}$/).test(name))
         return res.status(400).send({status:false, message:'Only alphabets in name!!'})
 
 //------------------intern CollegeName validation---------------
-        if (!internData.collegeName){
+        if (!collegeName){
         return res.status (400).send({status: false, message : "required collegeName"})
         }
         
@@ -42,38 +43,41 @@ const createIntern = async function (req,res) {
 
 
 // -----------------for email validation------------------
-        if (!internData.email){
+        if (!email){
         return res.status (400).send({status : false, message: "required email"})
         }
 
-        if (!validator.isEmail(internData.email.trim())){
+        if (!validator.isEmail(email.trim())){
         return res.status(400).send({status : false, message : "required valid email"})
         }
 
-        const findEmail = await internModel.find({email : internData.email})
+        const findEmail = await internModel.find({email : email})
 
         if (findEmail.length > 0){
         return res.status(400).send({status : false, message :"email is aldready taken"})
         }
         
 // --------------------for phone validation----------------
-        if (!internData.mobile){
+        if (!mobile){
         return res.status(400).send({status : false, message : "required mobile Number"})
         }
         
-        if (!(/^[0-9]{10}$/).test(internData.mobile)){
+        if (!(/^[0-9]{10}$/).test(mobile)){
         return res.status(400).send({status : false, message : "mobile number is invalid"})
         }
 
-        const findMobile = await internModel.find({mobile : internData.mobile})
+        const findMobile = await internModel.find({mobile : mobile})
        
         if (findMobile.length > 0){
         return res.status(400).send({status : false, message :"mobile Number is aldready taken"})
         }
 
 //---------------------creating Intern-----------------------------------------
-        const { name, mobile, email, collegeName} = internData
+        
         let collegeDetails = await collegeModel.findOne({name:collegeName})
+        if (!collegeDetails || collegeDetails.isDeleted == true){
+                return res.status(400).send({staus : false, message : "collage not found"})
+        }
         
 
         let collegeId = collegeDetails._id.toString()
