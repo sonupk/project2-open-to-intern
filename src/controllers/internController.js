@@ -113,14 +113,16 @@ const geDetails = async function(req, res){
         return res.status(400).send({status : false, message : "Enter valid abbreviation"})
         }
 
+        //-----if college_id not found--------
         let collegeData = await collegeModel.findOne({name:name})
         
-        let college_id =collegeData._id
+        let collegeName =collegeData
 
-        //-----if college_id not found--------
-        if(!college_id){
-        return res.status(400).send({status : false, message : "college id is not found"})
+        if(!collegeName){
+        return res.status(400).send({status : false, message : "college name not found"})
         }
+
+        
 
         let internData =await internModel.find({collegeId:college_id, isDeleted: false}).select({name:1,email:1,mobile:1})
         
