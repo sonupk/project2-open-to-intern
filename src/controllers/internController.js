@@ -8,8 +8,6 @@ const validator = require ("validator")
 const createIntern = async function (req,res) {
     try {
         const internData = req.body
-        const { name, mobile, email, collegeName} = internData
-        
         if (Object.keys(internData).length < 1){
             return res.status (400).send({status : false, message : "Bad request"})
         }
@@ -46,12 +44,11 @@ const createIntern = async function (req,res) {
             return res.status(400).send({status : false, message :"mobile Number is aldready taken"})
         }
 
-        
-
+        const { name, mobile, email, collegeName} = internData
         let collegeDetails = await collegeModel.findOne({name:collegeName})
         console.log(collegeDetails)
-        let collegeId = collegeDetails._id
-        let newData ={name,mobile,email,collegeId}
+        let college_id = collegeDetails._id.toString()
+        let newData ={name,mobile,email,college_id}
         const newIntern = await internModel.create(newData)
         res.status(201).send({status:true, message:"internship successfully created", data:newIntern})
         
@@ -68,6 +65,7 @@ const geDetails = async function(req, res){
         let name = req.query.name
         console.log(name)
         let collegeData = await collegeModel.findOne({name:name})
+        
         console.log(collegeData)
         let college_id =collegeData._id
         let internData =await internModel.find({collegeId:college_id}).select({name:1,email:1,mobile:1})
