@@ -124,7 +124,7 @@ const geDetails = async function(req, res){
 
 //-----------------fetching all details of college-intern----------------------------------
 
-        let internData =await internModel.find({collegeId:{$eq:collegeData}, isDeleted: false}).select({name:1,email:1,mobile:1})
+        let internData =await internModel.find({collegeId:collegeData, isDeleted: false}).select({name:1,email:1,mobile:1})
         
         // -----------------if no interns found--------------------------------------------
         if (internData.length == 0) {
