@@ -114,7 +114,7 @@ const geDetails = async function(req, res){
         }
 
         //-----if college name not found--------
-        let collegeData = await collegeModel.findOne({name:collegeName})
+        let collegeData = await collegeModel.findOne({name:collegeName, isDeleted:false})
         
 
         if(!collegeData){
@@ -124,14 +124,15 @@ const geDetails = async function(req, res){
 
 //-----------------fetching all details of college-intern----------------------------------
 
-        let internData =await internModel.find({collegeId:collegeData, isDeleted: false}).select({name:1,email:1,mobile:1})
+        let internData =await internModel.find({collegeId:{$eq:collegeData}, isDeleted: false}).select({name:1,email:1,mobile:1})
+        
         // -----------------if no interns found--------------------------------------------
         if (internData.length == 0) {
         return res.status(400).send({ status: false, message: "No intern found in this college !!" })
         }
         let enrollData = { name:collegeData.name,fullName:collegeData.fullName,logoLink:collegeData.logoLink , interns:internData}
         
-        res.status(200).send({staus:true, data:enrollData})
+        return res.status(200).send({status:true, data:enrollData})
         
         }
         catch(err){
