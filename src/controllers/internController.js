@@ -96,42 +96,42 @@ const createIntern = async function (req,res) {
 
 const geDetails = async function(req, res){
     try{    
-        let name = req.query.name
+        let collegeName = req.query.collegeName
 
 //---------------validation for name(collgeName abberiviation)----------------------------
         let query = req.query    
-        let comp = ['name']
+        let comp = ['collegeName']
 //-----------------------using query params validation---------------------------
        if(!Object.keys(query).every(ele=>comp.includes(ele)))
         return res.status(400).send({status : false, message : "wrong query given"})
 
-        if (!name){
-        return res.status(400).send({status : false, message : "name is required"})
+        if (!collegeName){
+        return res.status(400).send({status : false, message : "college name is required"})
         }
         
-        if (!name.trim() || !(/^[a-zA-Z]{3,}$/).test(name)){
+        if (!collegeName.trim() || !(/^[a-zA-Z]{3,}$/).test(collegeName)){
         return res.status(400).send({status : false, message : "Enter valid abbreviation"})
         }
 
         //-----if college name not found--------
-        let collegeData = await collegeModel.findOne({name:name})
+        let collegeData = await collegeModel.findOne({name:collegeName})
         
-        let collegeName =collegeData
 
-        if(!collegeName){
+        if(!collegeData){
         return res.status(400).send({status : false, message : "college name not found"})
         }
 
 
 //-----------------fetching all details of college-intern----------------------------------
 
-        let internData =await internModel.find({collegeId:collegeName, isDeleted: false}).select({name:1,email:1,mobile:1})
+        let internData =await internModel.find({collegeId:collegeData, isDeleted: false}).select({name:1,email:1,mobile:1})
         // -----------------if no interns found--------------------------------------------
         if (internData.length == 0) {
         return res.status(400).send({ status: false, message: "No intern found in this college !!" })
         }
+        let enrollData = { name:collegeData.name,fullName:collegeData.fullName,logoLink:collegeData.logoLink , interns:internData}
         
-        res.status(200).send({staus:true, name:collegeData.name,fullName:collegeData.fullName,logoLink:collegeData.logoLink,interns:internData})
+        res.status(200).send({staus:true, data:enrollData})
         
         }
         catch(err){
